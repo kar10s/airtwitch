@@ -7,11 +7,20 @@ package de.martindreier.airtwitch.airplay;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 import javax.jmdns.ServiceInfo;
+import org.apache.http.Header;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import de.martindreier.airtwitch.AirTwitchException;
 
 /**
  * Holds information about a registered and resolved device.
@@ -146,5 +155,35 @@ public class DeviceInfo
 	public int hashCode()
 	{
 		return key.hashCode();
+	}
+
+	/**
+	 * Create a new stream to the device.
+	 * 
+	 * @param contentURI
+	 *          The URI if the streaming content.
+	 * @return Controller instance for the stream.
+	 * @throws AirTwitchException
+	 *           Error configuring stream.
+	 */
+	public StreamControl createStream(URI contentURI) throws AirTwitchException
+	{
+		List<Header> defaultHeaders = new ArrayList<>(1);
+		defaultHeaders.add(new BasicHeader("User-Agent", "MediaControl/1.0"));
+		CloseableHttpClient client = HttpClients.custom().setDefaultHeaders(defaultHeaders).build();
+		StreamControl control = new StreamControl(this, client, contentURI);
+		return control;
+	}
+
+	/**
+	 * Get the device URI.
+	 *
+	 * @return the device URI.
+	 * @throws URISyntaxException
+	 *           Error when constructing the device URI.
+	 */
+	public URI getUri() throws URISyntaxException
+	{
+		return new URIBuilder().setScheme("http").setHost(inet4Addresses.get(0).getHostAddress()).setPort(port).build();
 	}
 }
