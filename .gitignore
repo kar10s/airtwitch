@@ -1,5 +1,5 @@
-/target/
-/.settings/
-/.classpath
-/.project
-/src/main/resources/twitch_client_id
+target/
+.settings/
+.classpath
+.project
+/airtwitch-core/src/main/resources/twitch_client_id
