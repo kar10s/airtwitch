@@ -8,6 +8,8 @@ package de.martindreier.airtwitch.cli;
 import java.io.IOException;
 import com.budhash.cliche.Shell;
 import com.budhash.cliche.ShellFactory;
+import com.budhash.cliche.util.ArrayHashMultiMap;
+import com.budhash.cliche.util.MultiMap;
 import de.martindreier.airtwitch.cli.devices.DeviceList;
 
 /**
@@ -25,7 +27,9 @@ public class AirTwitch
 		DeviceList.getInstance();
 
 		// Build shell and execute command loop
-		Shell shell = ShellFactory.createConsoleShell("airtwitch", "AirTwitch", new MainCommands());
+		MultiMap<String, Object> helpHandler = new ArrayHashMultiMap<>();
+		helpHandler.put("", new HelpCommands());
+		Shell shell = ShellFactory.createConsoleShell("airtwitch", "AirTwitch", new MainCommands(), helpHandler);
 		try
 		{
 			shell.commandLoop();
