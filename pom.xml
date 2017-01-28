@@ -3,7 +3,7 @@
 
 	<groupId>de.martindreier.airtwitch</groupId>
 	<artifactId>airtwitch-parent</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>AirTwitch Parent</name>
