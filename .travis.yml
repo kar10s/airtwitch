@@ -9,3 +9,4 @@ deploy:
   file: airtwitch-cli/target/airtwitch-cli-*-jar-with-dependencies.jar
   on:
     repo: mdreier/airtwitch
+    tag: true
