@@ -153,7 +153,7 @@ public class Twitch
 		parameters.add(new BasicNameValuePair("query", searchText));
 		return get(searchChannelPath, parameters, Channel.ChannelSearchResult.class,
 						(Twitch twitch, Channel.ChannelSearchResult searchResult) -> Arrays.stream(searchResult.channels)
-										.map(channelInfo -> new Channel(twitch, channelInfo)).collect(Collectors.toList()),
+										.map(channelInfo -> new Channel(twitch, channelInfo)).collect(Collectors.<Channel> toList()),
 						() -> Collections.emptyList());
 	}
 
