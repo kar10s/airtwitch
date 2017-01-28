@@ -41,7 +41,7 @@ public class HelpCommands implements ShellDependent
 		System.out.println();
 
 		System.out.print("Select your stream from the stream submenu and your target device from the device menu. ");
-		System.out.println("Then start playback with the stream command.");
+		System.out.println("Then start playback with the play command.");
 		System.out.println("Type ?help for available commands or help to show this message.");
 		System.out.println();
 

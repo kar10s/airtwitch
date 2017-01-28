@@ -10,6 +10,8 @@ import com.budhash.cliche.Command;
 import com.budhash.cliche.Shell;
 import com.budhash.cliche.ShellDependent;
 import com.budhash.cliche.ShellFactory;
+import de.martindreier.airtwitch.AirTwitchException;
+import de.martindreier.airtwitch.airplay.StreamControl;
 
 /**
  * Handler for CLI main menu.
@@ -84,6 +86,30 @@ public class MainCommands implements ShellDependent
 		{
 			System.out.println("Could not switch to stream menu");
 			exception.printStackTrace();
+		}
+	}
+
+	@Command(description = "Play the selected stream to the selected device")
+	public void play()
+	{
+		getStream().printSelectedStream();
+		getDevice().printSelectedDevice();
+		if (getStream().getSelectedStream() != null && getDevice().getSelectedDevice() != null)
+		{
+			try
+			{
+				StreamControl streamControl = getDevice().getSelectedDevice()
+								.createStream(getStream().getSelectedStream().getStreamUri());
+				streamControl.play();
+				System.out.println("Playback started, press <enter> to stop");
+				System.in.read();
+				streamControl.stop();
+			}
+			catch (AirTwitchException | IOException exception)
+			{
+				System.out.println("Could not start stream");
+				exception.printStackTrace();
+			}
 		}
 	}
 }

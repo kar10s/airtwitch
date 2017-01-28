@@ -76,4 +76,14 @@ public class DeviceCommands
 		}
 	}
 
+	/**
+	 * Get the currently selected device.
+	 * 
+	 * @return The selected device, or <code>null</code> if no device is selected.
+	 */
+	public DeviceInfo getSelectedDevice()
+	{
+		return DeviceList.getInstance().getDevice(selectedDeviceIndex);
+	}
+
 }
