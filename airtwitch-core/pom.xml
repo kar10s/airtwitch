@@ -13,6 +13,10 @@
 	<name>AirTwitch Core Library</name>
 	<description>Library to stream twitch video streams using Apple AirPlay</description>
 
+	<properties>
+		<twitch.client.id>${env.TWITCH_CLIENT_ID}</twitch.client.id>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jmdns</groupId>
@@ -30,11 +34,46 @@
 			<groupId>com.iheartradio.m3u8</groupId>
 			<artifactId>open-m3u8</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>buildWithClientId</id>
+			<activation>
+				<property>
+					<name>env.TWITCH_CLIENT_ID</name>
+				</property>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>buildWithoutClientId</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<excludes>
+							<exclude>**/twitch_client_id</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
 </project>
