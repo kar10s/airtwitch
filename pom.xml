@@ -9,6 +9,22 @@
 
 	<name>AirTwitch Parent</name>
 	<description>Library to stream twitch video streams using Apple AirPlay</description>
+	
+	<scm>
+		<url>https://github.com/mdreier/airtwitch</url>
+		<connection>scm:git:https://github.com/mdreier/airtwitch.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:mdreier/airtwitch.git</developerConnection>
+	</scm>
+	
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/mdreier/airtwitch/issues</url>
+	</issueManagement>
+	
+	<ciManagement>
+		<system>Travis-CI</system>
+		<url>https://travis-ci.org/mdreier/airtwitch</url>
+	</ciManagement>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
