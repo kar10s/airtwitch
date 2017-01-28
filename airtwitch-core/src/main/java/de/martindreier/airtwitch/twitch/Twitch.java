@@ -5,12 +5,12 @@
  */
 package de.martindreier.airtwitch.twitch;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -333,15 +333,23 @@ public class Twitch
 		// 2: Configuration file
 		if (getClass().getResource(TWITCH_CLIENT_ID_FILE) != null)
 		{
-			try
+			try (InputStream in = getClass().getResourceAsStream(TWITCH_CLIENT_ID_FILE))
 			{
-				Path clientIdFile = Paths.get(getClass().getResource(TWITCH_CLIENT_ID_FILE).toURI());
-				String clientId = Files.readAllLines(clientIdFile).stream().collect(Collectors.joining()).trim();
-				log.info(() -> String.format("Loaded client ID %s from file %s", clientId, clientIdFile));
-				log.exiting(Twitch.class.getName(), "determineClientID", clientId);
-				return clientId;
+				if (in != null)
+				{
+					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+					String clientId = reader.readLine().trim();
+					reader.close();
+					log.info(() -> String.format("Loaded client ID %s from file %s", clientId, TWITCH_CLIENT_ID_FILE));
+					log.exiting(Twitch.class.getName(), "determineClientID", clientId);
+					return clientId;
+				}
+				else
+				{
+					log.info(() -> "Client ID file not present");
+				}
 			}
-			catch (URISyntaxException | IOException exception)
+			catch (IOException exception)
 			{
 				AirTwitchException e = new AirTwitchException("Could not load twitch client ID file", exception);
 				log.throwing(Twitch.class.getName(), "determineClientID", e);
