@@ -49,7 +49,7 @@ public class MainCommands implements ShellDependent
 		{
 			getDevice().printSelectedDevice();
 			getDevice().listDevices();
-			ShellFactory.createSubshell("devices", shell, "AirTwitch", getDevice()).commandLoop();
+			ShellFactory.createSubshell("devices", shell, shell.getAppName(), getDevice()).commandLoop();
 			getDevice().printSelectedDevice();
 		}
 		catch (IOException exception)
