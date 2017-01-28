@@ -56,7 +56,7 @@ public class StreamCommands
 
 	/**
 	 * Get the currently selected stream.
-	 * 
+	 *
 	 * @return The selected stream, or <code>null</code> if no stream is selected.
 	 */
 	public LiveStream getSelectedStream()
@@ -91,20 +91,21 @@ public class StreamCommands
 	 *          The search term. Must not be empty.
 	 */
 	@Command(description = "Search for a channel")
-	public void search(@Param(name = "searchTerm", description = "Search query") String searchTerm)
+	public void search(@Param(name = "searchTerm", description = "Search query") String... searchTerms)
 	{
-		if (searchTerm == null || searchTerm.trim().isEmpty())
+		if (searchTerms == null || searchTerms.length == 0 || searchTerms[0].trim().isEmpty())
 		{
 			System.out.println("Enter a query for the channel search");
 			return;
 		}
 		try
 		{
-			List<Channel> channels = twitch.searchChannels(searchTerm);
+			String queryString = String.join(" ", searchTerms);
+			List<Channel> channels = twitch.searchChannels(queryString);
 			if (channels.isEmpty())
 			{
 				System.out.print("No search results for ");
-				System.out.println(searchTerm);
+				System.out.println(queryString);
 				return;
 			}
 			selectChannel(channels).ifPresent(this::selectStream);
