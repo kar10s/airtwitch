@@ -10,6 +10,8 @@ import com.budhash.cliche.Shell;
 import com.budhash.cliche.ShellFactory;
 import com.budhash.cliche.util.ArrayHashMultiMap;
 import com.budhash.cliche.util.MultiMap;
+import de.martindreier.airtwitch.cli.commands.HelpCommands;
+import de.martindreier.airtwitch.cli.commands.MainCommands;
 import de.martindreier.airtwitch.cli.devices.DeviceList;
 
 /**

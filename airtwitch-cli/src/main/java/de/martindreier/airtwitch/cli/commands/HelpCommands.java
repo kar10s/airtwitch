@@ -3,7 +3,7 @@
  * Created: 28.01.2017
  * (c) 2017 Martin Dreier
  */
-package de.martindreier.airtwitch.cli;
+package de.martindreier.airtwitch.cli.commands;
 
 import com.budhash.cliche.CLIException;
 import com.budhash.cliche.Command;
