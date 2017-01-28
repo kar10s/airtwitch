@@ -151,9 +151,10 @@ public class Twitch
 		String searchChannelPath = "/kraken/search/channels";
 		List<NameValuePair> parameters = new ArrayList<>(1);
 		parameters.add(new BasicNameValuePair("query", searchText));
-		return get(searchChannelPath, parameters, Channel.ChannelSearchResult.class,
-						(Twitch twitch, Channel.ChannelSearchResult searchResult) -> Arrays.stream(searchResult.channels)
-										.map(channelInfo -> new Channel(twitch, channelInfo)).collect(Collectors.<Channel> toList()),
+		BiFunction<Twitch, Channel.ChannelSearchResult, List<Channel>> resultHandler = (Twitch twitch,
+						Channel.ChannelSearchResult searchResult) -> Arrays.stream(searchResult.channels)
+										.map(channelInfo -> new Channel(twitch, channelInfo)).collect(Collectors.toList());
+		return get(searchChannelPath, parameters, Channel.ChannelSearchResult.class, resultHandler,
 						() -> Collections.emptyList());
 	}
 
