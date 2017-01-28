@@ -6,7 +6,7 @@ deploy:
   api_key:
     secure: FFpk03c5OcKXlgu6MgVCV/cyY/onUjZoEcjZtqwuPkX89MU1ZVUVXczKScVnKUusm67WLfnmXHG5wyzUGodbf1zKZT+9sK9vgAxRclq9BVXX+Bp3v1+z2rA0ugMMzVFY5GdXZ9jJm5aftRVkiSOaX15Gx5kmCme/hernj7jJMgtFTkz/BHUMGVyHBhozyvLuCNgJyLruyypMFvD4/gfmNUm1IO0h8Hy/R9sZe2gQVEgzWl/uFqh1k2+LVeT4IP0Kk/zjWqv+jaKaRdYSruIR72NXh0QQLDBUovv4XRZji0TRjJiXC4CBthX1DLAlUw/Ke7thqKOfSLHmf9sGGfdbwIESh9GrRwEoSpGHhwMmZpyokFE4dXDbVHfxlbFW//11VzCLNF08s9hxmibJSNB0rxxEOM/2n8Va2tN5JizD6RaShxEAycgBPvup7pBswDmgdL4wt1ivUwfw3EZqUrbzRZL759UcT4Buf0PdxU8zc/efyxlQ1MVakB4faUxGg6u6elC8lcFx5qZVFYYYiY76OZklWJEP5ed3fdHAYiheB8wMg/K3y6kAsu+XNfSUU3aVYbd3kxW6zX8vAMWbC9pgsGOlGJ0pPAh8kJ6t3eAbloKc0ueBv5TAxACc+Wrl1r+8FILoBxgFfKz8euVfyJs/MGi4bzWUEtp0qXe7906N+Y4=
   file_glob: true
-  file: airtwitch-cli/target/airtwitch-cli-*-jar-with-dependencies.jar
+  file: airtwitch-cli/target/airtwitch-cli-*.jar
   on:
     repo: mdreier/airtwitch
     tags: true
