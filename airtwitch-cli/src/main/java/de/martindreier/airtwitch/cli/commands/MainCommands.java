@@ -23,6 +23,8 @@ public class MainCommands implements ShellDependent
 
 	private final DeviceCommands	device	= new DeviceCommands();
 
+	private final StreamCommands	streams	= new StreamCommands();
+
 	@Override
 	public void cliSetShell(Shell theShell)
 	{
@@ -37,6 +39,16 @@ public class MainCommands implements ShellDependent
 	public DeviceCommands getDevice()
 	{
 		return device;
+	}
+
+	/**
+	 * Get stream command reference.
+	 *
+	 * @return Stream command reference.
+	 */
+	public StreamCommands getStream()
+	{
+		return streams;
 	}
 
 	/**
@@ -55,6 +67,22 @@ public class MainCommands implements ShellDependent
 		catch (IOException exception)
 		{
 			System.out.println("Could not switch to device menu");
+			exception.printStackTrace();
+		}
+	}
+
+	@Command(description = "Go to stream menu")
+	public void stream()
+	{
+		try
+		{
+			getStream().printSelectedStream();
+			ShellFactory.createSubshell("streams", shell, shell.getAppName(), getStream()).commandLoop();
+			getStream().printSelectedStream();
+		}
+		catch (IOException exception)
+		{
+			System.out.println("Could not switch to stream menu");
 			exception.printStackTrace();
 		}
 	}
