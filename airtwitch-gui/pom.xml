@@ -5,11 +5,19 @@
 	<parent>
 		<groupId>de.martindreier.airtwitch</groupId>
 		<artifactId>airtwitch-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>airtwitch-gui</artifactId>
 
 	<name>AirTwitch GUI</name>
 	<description>Graphical UI for AirTwitch</description>
+	
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>airtwitch-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>
