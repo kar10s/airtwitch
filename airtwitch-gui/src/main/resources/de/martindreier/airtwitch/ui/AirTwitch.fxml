@@ -10,9 +10,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="476.0" prefWidth="582.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.martindreier.airtwitch.ui.MainController">
+<BorderPane prefHeight="551.0" prefWidth="582.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.martindreier.airtwitch.ui.MainController">
    <center>
       <SplitPane dividerPositions="0.3706896551724138" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
@@ -49,8 +50,8 @@
                      <children>
                         <Label text="Source Stream" GridPane.columnSpan="2147483647" />
                         <ListView fx:id="channelList" onMouseClicked="#updateStreamList" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
-                        <TextField GridPane.rowIndex="1" />
-                        <Button mnemonicParsing="false" text="Search" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="streamName" GridPane.rowIndex="1" />
+                        <Button mnemonicParsing="false" onAction="#search" text="Search" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <ListView fx:id="streamList" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
@@ -62,4 +63,12 @@
    <padding>
       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
    </padding>
+   <bottom>
+      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" prefWidth="578.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="play" mnemonicParsing="false" onAction="#play" text="Play Selected Stream" />
+            <Button fx:id="stop" mnemonicParsing="false" onAction="#stop" text="Stop Playback" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

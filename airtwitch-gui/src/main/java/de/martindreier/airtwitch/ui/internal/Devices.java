@@ -3,7 +3,7 @@
  * Created: 04.02.2017
  * (c) 2017 Martin Dreier
  */
-package de.martindreier.airtwitch.ui;
+package de.martindreier.airtwitch.ui.internal;
 
 import java.io.IOException;
 import de.martindreier.airtwitch.AirTwitchException;
@@ -20,10 +20,19 @@ import javafx.beans.property.SimpleListProperty;
  */
 public class Devices
 {
+	/**
+	 * List of discovered devices.
+	 */
 	private ListProperty<DeviceInfo>	devices		= new SimpleListProperty<>();
 
+	/**
+	 * Singleton instance.
+	 */
 	private static Devices						instance	= new Devices();
 
+	/**
+	 * Service discovery instance.
+	 */
 	private AirPlayServiceDiscovery		serviceDiscovery;
 
 	private Devices()
@@ -31,11 +40,19 @@ public class Devices
 		// To make instance inaccessible
 	}
 
+	/**
+	 * Get device handler instance.
+	 *
+	 * @return Singleton instance.
+	 */
 	public static synchronized Devices getInstance()
 	{
 		return instance;
 	}
 
+	/**
+	 * Initialize the device handler and start listening to the service discovery.
+	 */
 	public synchronized void initialize()
 	{
 		if (serviceDiscovery == null)
@@ -47,11 +64,14 @@ public class Devices
 			}
 			catch (AirTwitchException exception)
 			{
-				AirTwitch.showError("Could not register device listener!", exception);
+				ErrorDialog.showError("Could not register device listener!", exception);
 			}
 		}
 	}
 
+	/**
+	 * Shut down the device listener. Terminates the service discovery.
+	 */
 	public synchronized void shutdown()
 	{
 		if (serviceDiscovery != null)
@@ -62,9 +82,19 @@ public class Devices
 			}
 			catch (IOException exception)
 			{
-				AirTwitch.showError("Could not shut down device listener!", exception);
+				ErrorDialog.showError("Could not shut down device listener!", exception);
 			}
 			serviceDiscovery = null;
 		}
+	}
+
+	/**
+	 * Get the list of discovered devices.
+	 * 
+	 * @return Devices property.
+	 */
+	public ListProperty<DeviceInfo> getDevices()
+	{
+		return devices;
 	}
 }
