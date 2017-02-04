@@ -294,7 +294,7 @@ public class Channel
 	static class ChannelSearchResult
 	{
 		@SerializedName("_total")
-		private long	total;
+		long					total;
 
 		ChannelInfo[]	channels;
 	}

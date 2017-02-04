@@ -7,7 +7,7 @@ package de.martindreier.airtwitch.twitch.replies;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.StatusLine;
 import org.mockito.Mock;
 import de.martindreier.airtwitch.twitch.ResponseHelper;
@@ -38,25 +38,15 @@ public class ChannelReply extends AbstractReply
 	 */
 	public ChannelReply(String channelId)
 	{
-		super(Pattern.compile(".*/kraken/channels/(.*?)(\\?.*)?"));
+		super(Pattern.compile(".*/kraken/channels/(.*?)(\\?.*)?"), ResponseHelper.channelResponse(channelId));
 		this.channelId = channelId;
-		this.initMocks();
-	}
-
-	/**
-	 * @see de.martindreier.airtwitch.twitch.replies.AbstractReply#getResponseContent()
-	 */
-	@Override
-	protected HttpEntity getResponseContent()
-	{
-		return ResponseHelper.channelResponse(channelId);
 	}
 
 	/**
 	 * @see de.martindreier.airtwitch.twitch.replies.AbstractReply#doesMatch(java.util.regex.Matcher)
 	 */
 	@Override
-	protected boolean doesMatch(Matcher requestMatcher)
+	protected boolean doesMatch(HttpRequest request, Matcher requestMatcher)
 	{
 		return requestMatcher.group(1).equalsIgnoreCase(channelId);
 	}

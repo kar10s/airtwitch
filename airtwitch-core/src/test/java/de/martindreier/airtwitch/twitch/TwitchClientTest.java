@@ -5,9 +5,13 @@
  */
 package de.martindreier.airtwitch.twitch;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import java.io.IOException;
+import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.After;
@@ -18,6 +22,7 @@ import org.junit.runners.JUnit4;
 import de.martindreier.airtwitch.AirTwitchException;
 import de.martindreier.airtwitch.test.HttpTestClient;
 import de.martindreier.airtwitch.twitch.replies.ChannelReply;
+import de.martindreier.airtwitch.twitch.replies.SearchReply;
 
 /**
  * @author Martin Dreier <martin@martindreier.de>
@@ -90,4 +95,22 @@ public class TwitchClientTest
 		assertNull("Channel returned when none should be found", c);
 	}
 
+	@Test
+	public void searchForChannels() throws AirTwitchException
+	{
+		httpClient.registerHandler("/kraken/search/channels.*", new SearchReply(1));
+		List<Channel> channels = testClient.searchChannels("nothing");
+		assertNotNull("No channel list returned", channels);
+		assertFalse("No channels found", channels.isEmpty());
+		assertEquals("Too many channels found", 1, channels.size());
+	}
+
+	@Test
+	public void searchForUnknownChannels() throws AirTwitchException
+	{
+		httpClient.registerHandler("/kraken/search/channels.*", new SearchReply(0));
+		List<Channel> channels = testClient.searchChannels("nothing");
+		assertNotNull("No channel list returned", channels);
+		assertTrue("Unexpected channels found", channels.isEmpty());
+	}
 }

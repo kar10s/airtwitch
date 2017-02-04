@@ -48,19 +48,22 @@ public abstract class AbstractReply implements Function<HttpRequest, CloseableHt
 	/**
 	 * @param string
 	 */
-	public AbstractReply(Pattern requestPattern)
+	public AbstractReply(Pattern requestPattern, HttpEntity responseContent)
 	{
 		this.requestPattern = requestPattern;
-		this.initMocks();
+		this.initMocks(responseContent);
 	}
 
 	/**
 	 * Initialize response mock.
+	 * 
+	 * @param responseContent
+	 *          Content of successful response.
 	 *
 	 * @param channelInfo
 	 *          Response content.
 	 */
-	protected void initMocks()
+	protected void initMocks(HttpEntity responseContent)
 	{
 		MockitoAnnotations.initMocks(this);
 
@@ -71,10 +74,8 @@ public abstract class AbstractReply implements Function<HttpRequest, CloseableHt
 
 		// Success response
 		when(responseOk.getStatusLine()).thenReturn(statusOk);
-		when(responseOk.getEntity()).thenReturn(getResponseContent());
+		when(responseOk.getEntity()).thenReturn(responseContent);
 	}
-
-	protected abstract HttpEntity getResponseContent();
 
 	/**
 	 * Handle the request.
@@ -92,7 +93,7 @@ public abstract class AbstractReply implements Function<HttpRequest, CloseableHt
 		Matcher requestMatcher = requestPattern.matcher(request.getRequestLine().getUri());
 		if (requestMatcher.matches())
 		{
-			if (doesMatch(requestMatcher))
+			if (doesMatch(request, requestMatcher))
 			{
 				return responseOk;
 			}
@@ -100,6 +101,6 @@ public abstract class AbstractReply implements Function<HttpRequest, CloseableHt
 		return null;
 	}
 
-	protected abstract boolean doesMatch(Matcher requestMatcher);
+	protected abstract boolean doesMatch(HttpRequest request, Matcher requestMatcher);
 
 }
