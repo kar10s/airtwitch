@@ -324,7 +324,7 @@ public class Channel
 		private String	game;
 		private long		viewers;
 		private int			videoHeight;
-		private int			averageFps;
+		private double	averageFps;
 		private long		delay;
 		private Date		createdAt;
 		private boolean	isPlaylist;
