@@ -41,6 +41,7 @@
 	<modules>
 		<module>airtwitch-core</module>
 		<module>airtwitch-cli</module>
+		<module>airtwitch-gui</module>
 	</modules>
 
 	<dependencyManagement>
