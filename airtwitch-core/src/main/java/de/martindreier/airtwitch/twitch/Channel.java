@@ -257,33 +257,32 @@ public class Channel
 	 * @author Martin Dreier <martin@martindreier.de>
 	 *
 	 */
-	@SuppressWarnings("unused")
 	static class ChannelInfo
 	{
 		@SerializedName("_id")
-		private String	id;
+		String	id;
 
-		private String	broadcasterLanguage;
+		String	broadcasterLanguage;
 
-		private Date		createdAt;
+		Date		createdAt;
 
-		private String	displayName;
+		String	displayName;
 
-		private long		followers;
+		long		followers;
 
-		private String	game;
+		String	game;
 
-		private String	language;
+		String	language;
 
-		private boolean	mature;
+		boolean	mature;
 
-		private String	name;
+		String	name;
 
-		private String	status;
+		String	status;
 
-		private Date		updatedAt;
+		Date		updatedAt;
 
-		private long		views;
+		long		views;
 	}
 
 	/**
@@ -302,7 +301,7 @@ public class Channel
 
 	/**
 	 * Outer wrapper for stream information for JSON deserialization.
-	 * 
+	 *
 	 * @author Martin Dreier <martin@martindreier.de>
 	 *
 	 */
