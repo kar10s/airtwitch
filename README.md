@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mdreier/airstream.svg?branch=master)](https://travis-ci.org/mdreier/airstream)
+[![Build Status](https://travis-ci.org/mdreier/airtwitch.svg?branch=master)](https://travis-ci.org/mdreier/airtwitch)
 
 # AirTwitch
 A library and clients to stream Twitch live streams to an Airplay device.
