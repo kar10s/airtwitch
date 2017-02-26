@@ -86,12 +86,38 @@ public class MainController
 	{
 		// Set cell factories for lists
 		deviceList.setCellFactory(MappingCellFactory.create(DeviceInfo::getName));
-		channelList.setCellFactory(MappingCellFactory.create(Channel::getName, Channel::isLive));
+		channelList.setCellFactory(MappingCellFactory.create(this::formatChannelName, Channel::isLive));
 		streamList.setCellFactory(MappingCellFactory.create(LiveStream::getTitle));
 
 		// Initialize stream model
 		streamAccess = new Streams();
 		initializeDataBinding();
+	}
+
+	/**
+	 * Format the channel name with live status and stream description.
+	 * 
+	 * @param channel
+	 *          Channel.
+	 * @return Enriched channel name.
+	 */
+	private String formatChannelName(Channel channel)
+	{
+		if (channel.isLive())
+		{
+			if (channel.getStatus().isEmpty())
+			{
+				return channel.getName();
+			}
+			else
+			{
+				return String.format("%s: %s", channel.getName(), channel.getStatus());
+			}
+		}
+		else
+		{
+			return String.format("%s (not live)", channel.getName());
+		}
 	}
 
 	/**
