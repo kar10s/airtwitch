@@ -5,6 +5,8 @@
  */
 package de.martindreier.airtwitch.ui;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import de.martindreier.airtwitch.AirTwitchException;
 import de.martindreier.airtwitch.airplay.DeviceInfo;
 import de.martindreier.airtwitch.airplay.StreamControl;
@@ -77,6 +79,11 @@ public class MainController
 	private Button												stop;
 
 	/**
+	 * Background processing thread.
+	 */
+	private ExecutorService								background		= Executors.newFixedThreadPool(1);
+
+	/**
 	 * Initialize the service discovery.
 	 *
 	 * @throws AirTwitchException
@@ -96,7 +103,7 @@ public class MainController
 
 	/**
 	 * Format the channel name with live status and stream description.
-	 * 
+	 *
 	 * @param channel
 	 *          Channel.
 	 * @return Enriched channel name.
@@ -147,8 +154,10 @@ public class MainController
 	 */
 	public void updateStreamList()
 	{
-		Channel selectedChannel = channelList.getSelectionModel().getSelectedItem();
-		streamAccess.getStreamsForChannel(selectedChannel);
+		background.submit(() -> {
+			Channel selectedChannel = channelList.getSelectionModel().getSelectedItem();
+			streamAccess.getStreamsForChannel(selectedChannel);
+		});
 	}
 
 	/**
@@ -156,12 +165,14 @@ public class MainController
 	 */
 	public void search()
 	{
-		String searchTerm = streamName.getText().trim();
-		if (searchTerm.length() == 0)
-		{
-			return;
-		}
-		streamAccess.searchStreams(searchTerm);
+		background.submit(() -> {
+			String searchTerm = streamName.getText().trim();
+			if (searchTerm.length() == 0)
+			{
+				return;
+			}
+			streamAccess.searchStreams(searchTerm);
+		});
 	}
 
 	/**
@@ -173,16 +184,18 @@ public class MainController
 		DeviceInfo delectedDevice = deviceList.getSelectionModel().getSelectedItem();
 		if (selectedStream != null && delectedDevice != null)
 		{
-			try
-			{
-				StreamControl stream = delectedDevice.createStream(selectedStream.getStreamUri());
-				stream.play();
-				streamControl.set(stream);
-			}
-			catch (AirTwitchException exception)
-			{
-				ErrorDialog.showError("Could not start playback", exception);
-			}
+			background.submit(() -> {
+				try
+				{
+					StreamControl stream = delectedDevice.createStream(selectedStream.getStreamUri());
+					stream.play();
+					streamControl.set(stream);
+				}
+				catch (AirTwitchException exception)
+				{
+					ErrorDialog.showError("Could not start playback", exception);
+				}
+			});
 		}
 	}
 
@@ -194,15 +207,17 @@ public class MainController
 		StreamControl stream = streamControl.get();
 		if (stream != null)
 		{
-			try
-			{
-				stream.stop();
-			}
-			catch (AirTwitchException exception)
-			{
-				ErrorDialog.showError("Could not stop playback", exception);
-			}
-			streamControl.set(null);
+			background.submit(() -> {
+				try
+				{
+					stream.stop();
+				}
+				catch (AirTwitchException exception)
+				{
+					ErrorDialog.showError("Could not stop playback", exception);
+				}
+				streamControl.set(null);
+			});
 		}
 	}
 }
