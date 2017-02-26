@@ -7,6 +7,7 @@ package de.martindreier.airtwitch.twitch;
 
 import java.net.URI;
 import org.apache.http.util.Args;
+import com.iheartradio.m3u8.data.PlaylistData;
 
 /**
  * @author Martin Dreier <martin@martindreier.de>
@@ -40,6 +41,19 @@ public class LiveStream
 			title = pathSegments[pathSegments.length - 2];
 		}
 		return new LiveStream(title, twitchStreamUri);
+	}
+
+	/**
+	 * Build a new live stream. The title in inferred from the URI.
+	 *
+	 * @param streamPlaylist
+	 *          Playlist information for twitch stream.
+	 * @return Live stream reference.
+	 */
+	public static LiveStream build(PlaylistData streamPlaylist)
+	{
+		URI streamURI = URI.create(streamPlaylist.getUri());
+		return new LiveStream(streamPlaylist.getStreamInfo().getVideo(), streamURI);
 	}
 
 	/**

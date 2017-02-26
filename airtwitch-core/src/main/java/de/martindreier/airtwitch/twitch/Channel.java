@@ -25,9 +25,11 @@ import com.google.gson.annotations.SerializedName;
 import com.iheartradio.m3u8.Encoding;
 import com.iheartradio.m3u8.Format;
 import com.iheartradio.m3u8.ParseException;
+import com.iheartradio.m3u8.ParsingMode;
 import com.iheartradio.m3u8.PlaylistException;
 import com.iheartradio.m3u8.PlaylistParser;
 import com.iheartradio.m3u8.data.Playlist;
+import com.iheartradio.m3u8.data.PlaylistData;
 import com.iheartradio.m3u8.data.TrackData;
 import de.martindreier.airtwitch.AirTwitchException;
 
@@ -194,10 +196,19 @@ public class Channel
 				try (ByteArrayInputStream in = new ByteArrayInputStream(
 								playlistSource.get().getBytes(Charset.forName("UTF-8"))))
 				{
-					PlaylistParser parser = new PlaylistParser(in, Format.M3U, Encoding.UTF_8);
+					// Lenient parsing required because Twitch uses own tags not known to
+					// the parser
+					PlaylistParser parser = new PlaylistParser(in, Format.EXT_M3U, Encoding.UTF_8, ParsingMode.LENIENT);
 					Playlist playlist = parser.parse();
-					if (playlist.hasMediaPlaylist())
+					if (playlist.hasMasterPlaylist())
 					{
+						// Extended M3U
+						List<PlaylistData> tracks = playlist.getMasterPlaylist().getPlaylists();
+						return tracks.stream().map(LiveStream::build).collect(Collectors.toList());
+					}
+					else if (playlist.hasMediaPlaylist())
+					{
+						// Plain M3U
 						List<TrackData> tracks = playlist.getMediaPlaylist().getTracks();
 						return tracks.stream().map(track -> track.getUri()).map(URI::create).map(LiveStream::build)
 										.collect(Collectors.toList());
