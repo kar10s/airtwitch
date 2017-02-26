@@ -100,8 +100,10 @@ public class MainController
 	protected void initializeDataBinding()
 	{
 		// Bind device list and update with devices discovered during startup
-		Devices.getInstance().getDevices().bind(deviceList.itemsProperty());
 		deviceList.getItems().addAll(Devices.getInstance().getDevices());
+		Devices.getInstance().getDevices().bind(deviceList.itemsProperty());
+		// deviceList.setItems(new ObservableListWrapper<>(new
+		// LinkedList<>(Devices.getInstance().getDevices())));
 
 		// Channel and stream lists
 		streamAccess.getChannels().bind(channelList.itemsProperty());

@@ -11,6 +11,7 @@ import de.martindreier.airtwitch.airplay.AirPlayServiceDiscovery;
 import de.martindreier.airtwitch.airplay.DeviceInfo;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 
 /**
  * Device handler.
@@ -23,7 +24,7 @@ public class Devices
 	/**
 	 * List of discovered devices.
 	 */
-	private ListProperty<DeviceInfo>	devices		= new SimpleListProperty<>();
+	private ListProperty<DeviceInfo>	devices		= new SimpleListProperty<>(FXCollections.observableArrayList());
 
 	/**
 	 * Singleton instance.
@@ -90,7 +91,7 @@ public class Devices
 
 	/**
 	 * Get the list of discovered devices.
-	 * 
+	 *
 	 * @return Devices property.
 	 */
 	public ListProperty<DeviceInfo> getDevices()

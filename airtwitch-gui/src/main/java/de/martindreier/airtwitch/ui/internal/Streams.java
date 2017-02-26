@@ -13,6 +13,7 @@ import de.martindreier.airtwitch.twitch.LiveStream;
 import de.martindreier.airtwitch.twitch.Twitch;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 
 /**
  * Stream data model.
@@ -25,12 +26,12 @@ public class Streams
 	/**
 	 * Search result list for channel search.
 	 */
-	private ListProperty<Channel>			channels	= new SimpleListProperty<>();
+	private ListProperty<Channel>			channels	= new SimpleListProperty<>(FXCollections.observableArrayList());
 
 	/**
 	 * List of streams for selected channel.
 	 */
-	private ListProperty<LiveStream>	streams		= new SimpleListProperty<>();
+	private ListProperty<LiveStream>	streams		= new SimpleListProperty<>(FXCollections.observableArrayList());
 
 	/**
 	 * Twitch client instance.
