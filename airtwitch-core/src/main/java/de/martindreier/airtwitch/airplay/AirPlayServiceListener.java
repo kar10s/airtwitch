@@ -5,6 +5,8 @@
  */
 package de.martindreier.airtwitch.airplay;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javax.jmdns.ServiceEvent;
@@ -21,8 +23,15 @@ public class AirPlayServiceListener implements ServiceListener
 	/**
 	 * Log instance.
 	 */
-	private static final Logger		log	= Logger.getLogger(AirPlayServiceListener.class.getName());
+	private static final Logger		log							= Logger.getLogger(AirPlayServiceListener.class.getName());
+	/**
+	 * Listener for resolved devices.
+	 */
 	private Consumer<DeviceInfo>	deviceResolvedListener;
+	/**
+	 * Already resolved devices to prevent double resolution.
+	 */
+	private Set<DeviceInfo>				resolvedDevices	= new HashSet<>();
 
 	/**
 	 * Create a new listener.
@@ -64,7 +73,13 @@ public class AirPlayServiceListener implements ServiceListener
 		log.entering(this.getClass().getName(), "serviceResolved", event);
 		log.fine(() -> String.format("Service resolved: name %s; type %s", event.getName(), event.getType()));
 		DeviceInfo info = new DeviceInfo(event.getInfo());
+		if (resolvedDevices.contains(info))
+		{
+			log.fine(() -> String.format("Known device resolved: %s", info.toString()));
+			return;
+		}
 		log.info(() -> String.format("New device resolved: %s", info.toString()));
+		resolvedDevices.add(info);
 		deviceResolvedListener.accept(info);
 		log.exiting(this.getClass().getName(), "serviceResolved");
 	}
