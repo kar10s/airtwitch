@@ -220,4 +220,13 @@ public class MainController
 			});
 		}
 	}
+
+	/**
+	 * Stop playing stream and sgut down background processing.
+	 */
+	public void shutdown()
+	{
+		stop();
+		background.shutdown();
+	}
 }

@@ -20,6 +20,11 @@ import javafx.stage.Stage;
  */
 public class AirTwitch extends Application
 {
+	/**
+	 * Reference to main controller.
+	 */
+	private MainController controller;
+
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
@@ -27,7 +32,9 @@ public class AirTwitch extends Application
 		Devices.getInstance().initialize();
 
 		// Build main window
-		Parent root = FXMLLoader.load(getClass().getResource("AirTwitch.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("AirTwitch.fxml"));
+		Parent root = loader.load();
+		controller = loader.getController();
 
 		Scene scene = new Scene(root);
 
@@ -41,6 +48,12 @@ public class AirTwitch extends Application
 	{
 		// End service discovery
 		Devices.getInstance().shutdown();
+
+		// Shut down background thread
+		if (controller != null)
+		{
+			controller.shutdown();
+		}
 	}
 
 	/**
