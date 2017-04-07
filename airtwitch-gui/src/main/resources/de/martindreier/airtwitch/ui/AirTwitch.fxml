@@ -50,7 +50,7 @@
                      <children>
                         <Label text="Source Stream" GridPane.columnSpan="2147483647" />
                         <ListView fx:id="channelList" onMouseClicked="#updateStreamList" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
-                        <TextField fx:id="streamName" GridPane.rowIndex="1" />
+                        <TextField fx:id="streamName" onAction="#search" GridPane.rowIndex="1" />
                         <Button mnemonicParsing="false" onAction="#search" text="Search" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <ListView fx:id="streamList" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
                      </children>
