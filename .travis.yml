@@ -10,3 +10,8 @@ deploy:
   on:
     repo: mdreier/airtwitch
     tags: true
+sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
