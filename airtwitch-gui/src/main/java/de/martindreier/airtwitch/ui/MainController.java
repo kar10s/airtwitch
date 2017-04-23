@@ -16,6 +16,7 @@ import de.martindreier.airtwitch.ui.internal.Devices;
 import de.martindreier.airtwitch.ui.internal.ErrorDialog;
 import de.martindreier.airtwitch.ui.internal.MappingCellFactory;
 import de.martindreier.airtwitch.ui.internal.Streams;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -189,7 +190,9 @@ public class MainController
 				{
 					StreamControl stream = delectedDevice.createStream(selectedStream.getStreamUri());
 					stream.play();
-					streamControl.set(stream);
+					Platform.runLater(() -> {
+						streamControl.set(stream);
+					});
 				}
 				catch (AirTwitchException exception)
 				{
@@ -216,7 +219,9 @@ public class MainController
 				{
 					ErrorDialog.showError("Could not stop playback", exception);
 				}
-				streamControl.set(null);
+				Platform.runLater(() -> {
+					streamControl.set(null);
+				});
 			});
 		}
 	}

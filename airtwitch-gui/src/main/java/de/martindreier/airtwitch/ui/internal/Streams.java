@@ -11,6 +11,7 @@ import de.martindreier.airtwitch.AirTwitchException;
 import de.martindreier.airtwitch.twitch.Channel;
 import de.martindreier.airtwitch.twitch.LiveStream;
 import de.martindreier.airtwitch.twitch.Twitch;
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -85,7 +86,10 @@ public class Streams
 			try
 			{
 				selectedChannel.requestChannelToken();
-				streams.setAll(selectedChannel.getLiveStreams());
+				final List<LiveStream> liveStreams = selectedChannel.getLiveStreams();
+				Platform.runLater(() -> {
+					streams.setAll(liveStreams);
+				});
 			}
 			catch (AirTwitchException exception)
 			{
@@ -112,7 +116,9 @@ public class Streams
 		try
 		{
 			List<Channel> channels = twitchClient.searchChannels(searchTerm);
-			this.channels.addAll(channels);
+			Platform.runLater(() -> {
+				this.channels.addAll(channels);
+			});
 		}
 		catch (AirTwitchException exception)
 		{

@@ -7,6 +7,7 @@ package de.martindreier.airtwitch.ui.internal;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -83,7 +84,9 @@ public class ErrorDialog
 			dialog.setContentText(stacktrace.toString());
 		}
 		// Open the dialog
-		dialog.show();
+		Platform.runLater(() -> {
+			dialog.show();
+		});
 	}
 
 }
