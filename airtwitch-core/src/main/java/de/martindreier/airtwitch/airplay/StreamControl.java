@@ -84,11 +84,11 @@ public class StreamControl
 	 */
 	StreamControl(DeviceInfo deviceInfo, CloseableHttpClient client, URI contentURI)
 	{
-		log.entering(Command.class.getName(), "<init>", new Object[] { deviceInfo, client, contentURI });
+		log.entering(StreamControl.class.getName(), "<init>", new Object[] { deviceInfo, client, contentURI });
 		this.deviceInfo = deviceInfo;
 		this.client = client;
 		this.contentURI = contentURI;
-		log.exiting(Command.class.getName(), "<init>");
+		log.exiting(StreamControl.class.getName(), "<init>");
 	}
 
 	/**
@@ -98,9 +98,9 @@ public class StreamControl
 	 */
 	public void stop() throws AirTwitchException
 	{
-		log.entering(Command.class.getName(), "stop");
+		log.entering(StreamControl.class.getName(), "stop");
 		sendRequest(Command.STOP, null);
-		log.exiting(Command.class.getName(), "stop");
+		log.exiting(StreamControl.class.getName(), "stop");
 	}
 
 	/**
@@ -111,12 +111,12 @@ public class StreamControl
 	 */
 	public void play() throws AirTwitchException
 	{
-		log.entering(Command.class.getName(), "play");
+		log.entering(StreamControl.class.getName(), "play");
 		List<NameValuePair> content = new ArrayList<>(2);
 		content.add(new BasicNameValuePair("Content-Location", contentURI.toString()));
 		content.add(new BasicNameValuePair("Start-Position", "0.0"));
 		sendRequest(Command.PLAY, content);
-		log.exiting(Command.class.getName(), "play");
+		log.exiting(StreamControl.class.getName(), "play");
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class StreamControl
 	 */
 	protected void sendRequest(Command command, List<NameValuePair> content) throws AirTwitchException
 	{
-		log.entering(Command.class.getName(), "sendRequest", new Object[] { command, content });
+		log.entering(StreamControl.class.getName(), "sendRequest", new Object[] { command, content });
 		try
 		{
 			HttpPost request = new HttpPost(deviceInfo.getUri().resolve(command.uri));
@@ -157,14 +157,14 @@ public class StreamControl
 					log.info(String.format("Response from device %s: %s", deviceInfo.getName(), responseContent));
 				}
 			}
-			log.exiting(Command.class.getName(), "sendRequest");
+			log.exiting(StreamControl.class.getName(), "sendRequest");
 		}
 		catch (URISyntaxException | IOException exception)
 		{
 			log.log(Level.SEVERE, "Request failed", exception);
 			AirTwitchException e = new AirTwitchException("Could not send command %s to device %s", exception, command.name(),
 							deviceInfo.getName());
-			log.throwing(Command.class.getName(), "sendRequest", e);
+			log.throwing(StreamControl.class.getName(), "sendRequest", e);
 			throw e;
 		}
 	}
