@@ -117,6 +117,7 @@ public class MainController
 		// Initialize stream model
 		streamAccess = new Streams();
 		initializeDataBinding();
+		Platform.runLater(() -> streamName.requestFocus());
 	}
 
 	/**
