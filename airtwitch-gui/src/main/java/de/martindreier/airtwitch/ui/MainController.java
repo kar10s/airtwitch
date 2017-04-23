@@ -5,6 +5,7 @@
  */
 package de.martindreier.airtwitch.ui;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import de.martindreier.airtwitch.AirTwitchException;
@@ -14,6 +15,7 @@ import de.martindreier.airtwitch.twitch.Channel;
 import de.martindreier.airtwitch.twitch.LiveStream;
 import de.martindreier.airtwitch.ui.internal.Devices;
 import de.martindreier.airtwitch.ui.internal.ErrorDialog;
+import de.martindreier.airtwitch.ui.internal.History;
 import de.martindreier.airtwitch.ui.internal.MappingCellFactory;
 import de.martindreier.airtwitch.ui.internal.Streams;
 import javafx.application.Platform;
@@ -22,8 +24,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 
 /**
  * Controller for the AirTwitch UI.
@@ -60,7 +62,7 @@ public class MainController
 	 * Search field for streams.
 	 */
 	@FXML
-	private TextField											streamName;
+	private ComboBox<String>							streamName;
 
 	/**
 	 * Data model for streams.
@@ -85,6 +87,11 @@ public class MainController
 	private ExecutorService								background		= Executors.newFixedThreadPool(1);
 
 	/**
+	 * History instance using default save file.
+	 */
+	private History												history				= new History(null, true);
+
+	/**
 	 * Initialize the service discovery.
 	 *
 	 * @throws AirTwitchException
@@ -92,6 +99,16 @@ public class MainController
 	@FXML
 	public void initialize() throws AirTwitchException
 	{
+		// Load history
+		try
+		{
+			history.load();
+		}
+		catch (IOException exception)
+		{
+			throw new AirTwitchException("Could not load history", exception);
+		}
+
 		// Set cell factories for lists
 		deviceList.setCellFactory(MappingCellFactory.create(DeviceInfo::getName));
 		channelList.setCellFactory(MappingCellFactory.create(this::formatChannelName, Channel::isLive));
@@ -133,6 +150,9 @@ public class MainController
 	 */
 	protected void initializeDataBinding()
 	{
+		// Bind history to search term drop down
+		streamName.itemsProperty().bind(history.getEntriesProperty());
+
 		// Bind device list and update with devices discovered during startup
 		deviceList.getItems().addAll(Devices.getInstance().getDevices());
 		Devices.getInstance().getDevices().bind(deviceList.itemsProperty());
@@ -166,14 +186,37 @@ public class MainController
 	 */
 	public void search()
 	{
+		String searchTerm = streamName.getValue().trim();
+		saveToHistory(searchTerm);
 		background.submit(() -> {
-			String searchTerm = streamName.getText().trim();
+
 			if (searchTerm.length() == 0)
 			{
 				return;
 			}
 			streamAccess.searchStreams(searchTerm);
 		});
+	}
+
+	/**
+	 * Save search term to entries. If this is a new search term, it is added to
+	 * the entries, possibly replacing the oldest entry. If it is already in the
+	 * entries, it is move to the top.
+	 *
+	 * @param searchTerm
+	 *          The search term to add to the history.
+	 */
+	protected void saveToHistory(String searchTerm)
+	{
+		try
+		{
+			history.add(searchTerm);
+			streamName.getSelectionModel().select(0);
+		}
+		catch (IOException exception)
+		{
+			ErrorDialog.showError("Could not save search history", exception);
+		}
 	}
 
 	/**

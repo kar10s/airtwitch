@@ -111,12 +111,12 @@ public class Streams
 	 */
 	public void searchStreams(String searchTerm)
 	{
-		this.channels.clear();
-		this.streams.clear();
 		try
 		{
 			List<Channel> channels = twitchClient.searchChannels(searchTerm);
 			Platform.runLater(() -> {
+				this.channels.clear();
+				this.streams.clear();
 				this.channels.addAll(channels);
 			});
 		}
